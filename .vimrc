@@ -35,7 +35,10 @@ Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'vim-scripts/indentpython.vim'
 Plugin 'kristijanhusak/vim-hybrid-material'
+Plugin 'nvie/vim-flake8'
+
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -54,7 +57,66 @@ filetype plugin indent on    " required
 
 set laststatus=2
 
-map <C-o> :NERDTreeToggle<CR>
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
+
 set ttymouse=xterm2
 set mouse=a
+
+"ensure backspaces work with autoindent
+set backspace=indent,eol,start
+"split navigations
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Enable folding
+set foldmethod=indent
+set foldlevel=99
+
+" Enable folding with the spacebar
+nnoremap <space> za
+
+
+
+" File Type Specific Indents
+au BufNewFile,BufRead *.py
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=120 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix
+
+" Flag Unnecessary whitespace
+highlight BadWhitespace ctermbg=red guibg=darkred
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+
+au BufNewFile,BufRead *.cpp,*.c,*.cxx,*.h
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=120 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix
+
+" YouCompleteMe modifications
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+"python with virtualenv support
+"todo: figure this out.
+
+let python_highlight_all=1
+syntax on
+
+
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+
+:nnoremap <Leader>zz :let &scrolloff=999-&scrolloff<CR>
+
+set nu
 
